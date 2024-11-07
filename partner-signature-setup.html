@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redis Partner's Signature Generator</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+    <div class="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+        <h2 class="text-2xl font-semibold text-center text-gray-800 mb-4">Redis Partner's Signature Generator</h2>
+
+        <form id="signatureForm" class="space-y-4">
+            <div>
+                <label for="code" class="block text-gray-700 font-medium">Partners Signature</label>
+                <input type="text" id="code" placeholder="Enter Partner Signature" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="userId" class="block text-gray-700 font-medium">User ID</label>
+                <input type="text" id="userId" placeholder="0fcf149f-f3b5-43d3-8236-52f485e24fb1" value="0fcf149f-f3b5-43d3-8236-52f485e24fb1" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="username" class="block text-gray-700 font-medium">Username</label>
+                <input type="text" id="username" placeholder="Enter Username" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="name" class="block text-gray-700 font-medium">Name</label>
+                <input type="text" id="name" placeholder="Harsh Boricha" value="Harsh Boricha" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="salesLevel" class="block text-gray-700 font-medium">Sales Level</label>
+                <input type="text" id="salesLevel" placeholder="3" value="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="modeCode" class="block text-gray-700 font-medium">Merchant Code</label>
+                <input type="text" id="modeCode" placeholder="Enter Merchant Code" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="modeType" class="block text-gray-700 font-medium">Mode Type</label>
+                <input type="text" id="modeType" placeholder="STORE" value="STORE" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="modeName" class="block text-gray-700 font-medium">Mode Name</label>
+                <input type="text" id="modeName" placeholder="Mode Name" value="Bliklan" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <div>
+                <label for="modeState" class="block text-gray-700 font-medium">Mode State</label>
+                <input type="text" id="modeState" placeholder="ACTIVE" value="ACTIVE" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+
+            <button type="button" onclick="generateSignature()" class="w-full bg-indigo-600 text-white py-2 rounded-md font-semibold hover:bg-indigo-700">Generate Signature</button>
+        </form>
+
+        <h3 class="text-xl font-semibold text-gray-800 mt-6">Redis Partner's Signature</h3>
+        <textarea id="signature" readonly class="w-full mt-2 p-3 border border-gray-300 rounded-md h-32 bg-gray-100"></textarea>
+        <button onclick="copyToClipboard()" class="w-full bg-green-600 text-white py-2 rounded-md font-semibold hover:bg-green-700 mt-2">Copy to Clipboard</button>
+    </div>
+
+    <script>
+        function generateSignature() {
+            const code = document.getElementById("code").value;
+            const userId = document.getElementById("userId").value;
+            const username = document.getElementById("username").value;
+            const name = document.getElementById("name").value;
+            const salesLevel = document.getElementById("salesLevel").value;
+            const modeCode = document.getElementById("modeCode").value;
+            const modeType = document.getElementById("modeType").value;
+            const modeName = document.getElementById("modeName").value;
+            const modeState = document.getElementById("modeState").value;
+
+            const signature = `SET "com.gdn.partners:${code}" "{\\"code\\":\\"${code}\\",\\"userId\\":\\"${userId}\\",\\"username\\":\\"${username}\\",\\"name\\":\\"${name}\\",\\"salesLevel\\":\\"${salesLevel}\\",\\"mode\\":{\\"code\\":\\"${modeCode}\\",\\"type\\":\\"${modeType}\\",\\"name\\":\\"${modeName}\\",\\"state\\":\\"${modeState}\\"}}"`;
+
+            document.getElementById("signature").value = signature;
+        }
+
+        function copyToClipboard() {
+            const signatureText = document.getElementById("signature");
+            signatureText.select();
+            signatureText.setSelectionRange(0, 99999); // For mobile devices
+            document.execCommand("copy");
+            alert("Signature copied to clipboard!");
+        }
+    </script>
+
+</body>
+</html>
